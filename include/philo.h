@@ -5,17 +5,22 @@
 
 enum STATE
 {
-    THINK = 0,
+    READY = 0,
+    THINK,
     EAT,
-    REST,
-    READY
+    REST
 };
 
 typedef struct s_philo
 {
     int bowl;
-    pthread_mutex_t stick;
+    int me;
     int state;
+    struct s_philo *table;
+    pthread_t thread;
+    pthread_mutex_t stick;
+    int size;
+    bool processed;
 } t_philo;
 
 typedef struct s_loop

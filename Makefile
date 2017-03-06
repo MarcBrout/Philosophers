@@ -1,5 +1,5 @@
 ##
-## Makefile for my_malloc in /home/brout_m/rendu/system/PSU_2016_malloc
+## Makefile for philo in /home/brout_m/rendu/system/PSU_2016_philo
 ##
 ## Made by Brout
 ## Login   <marc.brout@epitech.eu>
@@ -25,7 +25,7 @@ INC=		./include
 
 CC=			gcc
 
-INC= 		-I./include -lpthread -lriceferee -L./
+INC= 		-I./include -lriceferee -lpthread -L./
 
 ifeq ($(DEBUG), yes)
 CFLAGS=	  	-g -W -Wall -Wextra -Werror $(INC)

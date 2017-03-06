@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "arguments.h"
 #include "extern.h"
 #include "philo.h"
-#include "arguments.h"
 
 bool getMaxEat(const char *maxEat, t_loop *phil)
 {
