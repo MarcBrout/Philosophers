@@ -22,14 +22,14 @@ OBJ=		$(SRC:.c=.o)
 
 INC=		./include
 
-CC=		gcc
+CC=			gcc
 
-INC= -I./include -lpthread -lriceferee -L./
+INC= 		-I./include -lpthread -lriceferee -L./
 
 ifeq ($(DEBUG), yes)
-CFLAGS=	  -g -W -Wall -Wextra -Werror $(INC)
+CFLAGS=	  	-g -W -Wall -Wextra -Werror $(INC)
 else
-CFLAGS=	  -W -Wall -Wextra -Werror $(INC)
+CFLAGS=	  	-W -Wall -Wextra -Werror $(INC)
 endif
 
 RM=		rm -rf
