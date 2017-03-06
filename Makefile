@@ -14,7 +14,8 @@ NAME=		philo
 
 SRC_DIR=	./src/
 
-SRC_FIL=	philo.c
+SRC_FIL=	philo.c \
+			letsThink.c
 
 SRC= 		$(addprefix $(SRC_DIR), $(SRC_FIL))
 
