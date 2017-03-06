@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <pthread.h>
-#include <stdio.h>
 #include "philo.h"
 
 static void initTable(t_loop const * const philosophers,
