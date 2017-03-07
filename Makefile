@@ -1,5 +1,5 @@
 ##
-## Makefile for my_malloc in /home/brout_m/rendu/system/PSU_2016_malloc
+## Makefile for philo in /home/brout_m/rendu/system/PSU_2016_philo
 ##
 ## Made by Brout
 ## Login   <marc.brout@epitech.eu>
