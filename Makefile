@@ -5,7 +5,7 @@
 ## Login   <marc.brout@epitech.eu>
 ##
 ## Started on  Mon Jan 23 13:38:11 2017 Brout
-## Last update Mon Mar  6 11:36:45 2017 brout_m
+## Last update Mon Mar  6 17:33:47 2017 duhieu_b
 ##
 
 MAKE_DIR=	./
@@ -25,7 +25,7 @@ INC=		./include
 
 CC=			gcc
 
-INC= 		-I./include -lpthread -lriceferee -L./
+INC= 		-I./include -lriceferee -lpthread -L./
 
 ifeq ($(DEBUG), yes)
 CFLAGS=	  	-g -W -Wall -Wextra -Werror $(INC)
