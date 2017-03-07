@@ -37,6 +37,8 @@ void *threadLaunch(void *philosophe)
             ++i;
         }
     }
+    if (philoAction(&philo->table[philo->me]))
+        return (NULL);
     return (NULL);
 }
 
@@ -62,4 +64,3 @@ int launchPhilosophy(t_loop const * const philosophers)
     }
     return (0);
 }
-
