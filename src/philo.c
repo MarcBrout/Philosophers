@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include "arguments.h"
 #include "extern.h"
-#include "philo.h"
 
 static bool getMaxEat(const char *maxEat, t_loop *phil)
 {

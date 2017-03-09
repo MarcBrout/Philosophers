@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <extern.h>
-#include <stdio.h>
 #include <unistd.h>
 #include "philo.h"
 
