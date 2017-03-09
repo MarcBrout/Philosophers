@@ -4,6 +4,7 @@
 # define PHILO_RIGHT(i, size) ((i) == (size) - 1) ? 0 : (i) + 1
 
 #include <stdbool.h>
+#include <bits/semaphore.h>
 
 enum STATE
 {
@@ -21,6 +22,7 @@ typedef struct s_philo
     struct s_philo *table;
     pthread_t thread;
     pthread_mutex_t stick;
+    sem_t sem;
     int size;
     bool processed;
 } t_philo;
