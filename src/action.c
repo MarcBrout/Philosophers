@@ -5,157 +5,74 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Thu Mar  9 15:06:35 2017 duhieu_b
+** Last update Thu Mar  9 16:43:22 2017 brout_m
 */
 
 #include <stdlib.h>
 #include <pthread.h>
 #include <extern.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "philo.h"
 
-/* int	sleepReady(t_philo *phil) */
-/* { */
-/*   if (phil->state == READY && */
-/*           (phil->table[PHILO_LEFT(phil->me, phil->size)].state == THINK || */
-/*                   (phil->table[PHILO_LEFT(phil->me, phil->size)].state == SLEEP && */
-/*                    phil->table[PHILO_RIGHT(phil->me, phil->size)].state == THINK))) */
-/*   { */
-/*       printf("SLEEP1\n"); */
-/*       lphilo_sleep(); */
-/*       phil->state = SLEEP; */
-/*       phil->processed = true; */
-/*       return (1); */
-/*   } */
-/*       return (0); */
-/* } */
+pthread_mutex_t bowl = PTHREAD_MUTEX_INITIALIZER;
+int g_bowl;
 
-/* int thinkReady(t_philo *phil) */
-/* { */
-/*     if (phil->state == READY) */
-/*     { */
-/*         printf("THINK1\n"); */
-/*         lphilo_think(); */
-/*         pthread_mutex_lock(&phil->stick); */
-/*         lphilo_take_chopstick(&phil->stick); */
-/*         pthread_mutex_unlock(&phil->stick); */
-/*         phil->state = THINK; */
-/*         phil->processed = true; */
-/*         return (1); */
-/*     } */
-/*     return (0); */
-/* } */
-
-/* int eat(t_philo *phil) */
-/* { */
-/*     if (phil->state == THINK) */
-/*     { */
-/*         pthread_mutex_lock(&phil->stick); */
-/*         lphilo_release_chopstick(&phil->stick); */
-/*         pthread_mutex_unlock(&phil->stick); */
-/*         lphilo_eat(); */
-/*         pthread_mutex_lock(&phil->stick); */
-/*         lphilo_take_chopstick(&phil->stick); */
-/*         pthread_mutex_unlock(&phil->stick); */
-/*         pthread_mutex_lock(&phil->table[PHILO_RIGHT(phil->me, phil->size)].stick); */
-/*         lphilo_take_chopstick(&phil->table[PHILO_RIGHT(phil->me, phil->size)].stick); */
-/*         pthread_mutex_unlock(&phil->table[PHILO_RIGHT(phil->me, phil->size)].stick); */
-/*         phil->processed = true; */
-/*         phil->bowl -= 1; */
-/*         phil->state = EAT; */
-/*         return (1); */
-/*     } */
-/*     return (0); */
-/* } */
-
-/* int sleepAfterEat(t_philo *phil) */
-/* { */
-/*     if (phil->state == EAT) */
-/*     { */
-/*         printf("SLEEP2\n"); */
-/*         pthread_mutex_lock(&phil->stick); */
-/*         lphilo_release_chopstick(&phil->stick); */
-/*         pthread_mutex_unlock(&phil->stick); */
-/*         pthread_mutex_lock(&phil->table[PHILO_RIGHT(phil->me, phil->size)].stick); */
-/*         lphilo_release_chopstick(&phil->table[PHILO_RIGHT(phil->me, phil->size)].stick); */
-/*         pthread_mutex_unlock(&phil->table[PHILO_RIGHT(phil->me, phil->size)].stick); */
-/*         lphilo_sleep(); */
-/*         phil->processed = true; */
-/*         phil->state = SLEEP; */
-/*         return (1); */
-/*     } */
-/*     return (0); */
-/* } */
-
-/* int thinkAfterRest(t_philo *phil) */
-/* { */
-/*     if (phil->state == SLEEP && ((phil->table[PHILO_LEFT(phil->me, phil->size)].state == EAT && */
-/*             phil->table[PHILO_LEFT(phil->me, phil->size)].processed == false) || */
-/*                                 phil->table[PHILO_LEFT(phil->me, phil->size)].state == SLEEP || */
-/*                                 phil->size == 1)) */
-/*     { */
-/*         printf("COUNT\n"); */
-/*         lphilo_think(); */
-/*         pthread_mutex_lock(&phil->stick); */
-/*         lphilo_take_chopstick(&phil->stick); */
-/*         pthread_mutex_unlock(&phil->stick); */
-/*         phil->processed = true; */
-/*         phil->state = THINK; */
-/*         return (1); */
-/*     } */
-/*     return (0); */
-/* } */
-
-/* int justSleep(t_philo *phil) */
-/* { */
-/*     printf("SLEEP3\n"); */
-/*     lphilo_sleep(); */
-/*     phil->processed = true; */
-/*     phil->state = SLEEP; */
-/*     return (0); */
-/* } */
-
-/* Fcptr *initTab() */
-/* { */
-/*   Fcptr *tab; */
-
-/*   if (!(tab = malloc(sizeof(Fcptr) * 7))) */
-/*     return (NULL); */
-/*   tab[0] = sleepReady; */
-/*   tab[1] = thinkReady; */
-/*   tab[2] = eat; */
-/*   tab[3] = sleepAfterEat; */
-/*   tab[4] = thinkAfterRest; */
-/*   tab[5] = justSleep; */
-/*   tab[6] = NULL; */
-/*   return (tab); */
-/* } */
-
-int checkOtherBowl(t_philo *phil)
+bool bowlIsEmpty()
 {
-    int i;
+  int remain;
 
-    i = 0;
-    while (i < phil->size)
-    {
-        if (phil->table[i].bowl < 1)
-            return (0);
-        i++;
-    }
-    return (1);
+  pthread_mutex_lock(&bowl);
+  remain = g_bowl;
+  pthread_mutex_unlock(&bowl);
+  return (remain < 1);
 }
 
-int	philoAction(t_philo *phil)
+void update_g_bowl(int value)
 {
-  Fcptr *tab;
-  int	i;
+  pthread_mutex_lock(&bowl);
+  if (g_bowl > value)
+    g_bowl = value;
+  pthread_mutex_unlock(&bowl);
+}
 
-  //  if (!(tab = initTab()))
-  //  return (1);
-  i = 0;
-  while (checkOtherBowl(phil))
+void think(t_philo *phil)
+{
+  pthread_mutex_lock(&phil->stick);
+  lphilo_take_chopstick(&phil->stick);
+  lphilo_think();
+  lphilo_release_chopstick(&phil->stick);
+  pthread_mutex_unlock(&phil->stick);
+  usleep(100);
+}
+
+void eat(t_philo *phil)
+{
+  while (pthread_mutex_trylock(&phil->stick));
+  while (pthread_mutex_trylock(RGHT_STCK(phil)));
+  lphilo_take_chopstick(&phil->stick);
+  lphilo_take_chopstick(RGHT_STCK(phil));
+  lphilo_eat();
+  --phil->bowl;
+  update_g_bowl(phil->bowl);
+  lphilo_release_chopstick(RGHT_STCK(phil));
+  lphilo_release_chopstick(&phil->stick);
+  pthread_mutex_unlock(RGHT_STCK(phil));
+  pthread_mutex_unlock(&phil->stick);
+  usleep(100);
+}
+
+int philoAction(t_philo *phil)
+{
+  while (!bowlIsEmpty())
     {
-
+      think(phil);
+      if (bowlIsEmpty())
+	break;
+      eat(phil);
+      if (bowlIsEmpty())
+	break;
+      lphilo_sleep();
     }
   return (0);
 }
