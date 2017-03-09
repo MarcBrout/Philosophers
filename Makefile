@@ -5,7 +5,7 @@
 ## Login   <marc.brout@epitech.eu>
 ##
 ## Started on  Mon Jan 23 13:38:11 2017 Brout
-## Last update Mon Mar  6 11:36:45 2017 brout_m
+## Last update Tue Mar  7 11:40:27 2017 brout_m
 ##
 
 MAKE_DIR=	./
@@ -25,7 +25,9 @@ INC=		./include
 
 CC=			gcc
 
-INC= 		-I./include -lriceferee -lpthread -L./
+INC= 		-I./include
+
+LDFLAGS=	-lriceferee -lpthread -L./
 
 ifeq ($(DEBUG), yes)
 CFLAGS=	  	-g -W -Wall -Wextra -Werror $(INC)
@@ -36,7 +38,7 @@ endif
 RM=		rm -rf
 
 $(NAME): $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(INC)
+	$(CC) -o $(NAME) $(OBJ) $(INC) $(LDFLAGS)
 
 all: $(NAME)
 
