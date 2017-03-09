@@ -5,7 +5,7 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Thu Mar  9 16:43:22 2017 brout_m
+** Last update Thu Mar  9 17:48:03 2017 brout_m
 */
 
 #include <stdlib.h>
@@ -74,5 +74,5 @@ int philoAction(t_philo *phil)
 	break;
       lphilo_sleep();
     }
-  return (0);
+  pthread_exit(0);
 }

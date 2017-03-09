@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:42:39 2017 brout_m
-** Last update Thu Mar  9 16:42:40 2017 brout_m
+** Last update Thu Mar  9 18:21:18 2017 brout_m
 */
 
 #ifndef PHILO_H
@@ -36,7 +36,9 @@ typedef struct		s_loop
 
 extern int g_bowl;
 
-int launchPhilosophy(t_loop const * const philosophers);
+int launchPhilosophy(t_loop const * const philosophers,
+		     t_philo *table);
 int philoAction(t_philo *phil);
+t_philo *createTable(t_loop const * const philosophers);
 
 #endif /* !PHILO_H */
