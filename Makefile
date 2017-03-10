@@ -5,7 +5,7 @@
 ## Login   <marc.brout@epitech.eu>
 ##
 ## Started on  Mon Jan 23 13:38:11 2017 Brout
-## Last update Tue Mar  7 11:40:27 2017 brout_m
+## Last update Fri Mar 10 16:33:31 2017 brout_m
 ##
 
 MAKE_DIR=	./
@@ -24,7 +24,7 @@ OBJ=		$(SRC:.c=.o)
 
 INC=		./include
 
-CC=			gcc
+CC=		gcc
 
 INC= 		-I./include
 
@@ -34,6 +34,10 @@ ifeq ($(DEBUG), yes)
 CFLAGS=	  	-g -W -Wall -Wextra -Werror $(INC)
 else
 CFLAGS=	  	-W -Wall -Wextra -Werror $(INC)
+endif
+
+ifeq ($(SANITIZE), yes)
+CC +=	-fsanitize=thread
 endif
 
 RM=		rm -rf

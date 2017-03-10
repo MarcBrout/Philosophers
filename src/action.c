@@ -5,7 +5,7 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Thu Mar  9 17:48:03 2017 brout_m
+** Last update Fri Mar 10 17:09:09 2017 brout_m
 */
 
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include "philo.h"
 
-pthread_mutex_t bowl = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t bowl = PTHREAD_MUTEX_INITIALIZER;
 int g_bowl;
 
 bool bowlIsEmpty()
@@ -42,13 +42,12 @@ void think(t_philo *phil)
   lphilo_think();
   lphilo_release_chopstick(&phil->stick);
   pthread_mutex_unlock(&phil->stick);
-  usleep(100);
 }
 
 void eat(t_philo *phil)
 {
-  while (pthread_mutex_trylock(&phil->stick));
-  while (pthread_mutex_trylock(RGHT_STCK(phil)));
+  pthread_mutex_lock(RGHT_STCK(phil));
+  pthread_mutex_lock(&phil->stick);
   lphilo_take_chopstick(&phil->stick);
   lphilo_take_chopstick(RGHT_STCK(phil));
   lphilo_eat();
@@ -58,7 +57,6 @@ void eat(t_philo *phil)
   lphilo_release_chopstick(&phil->stick);
   pthread_mutex_unlock(RGHT_STCK(phil));
   pthread_mutex_unlock(&phil->stick);
-  usleep(100);
 }
 
 int philoAction(t_philo *phil)
@@ -66,11 +64,8 @@ int philoAction(t_philo *phil)
   while (!bowlIsEmpty())
     {
       think(phil);
-      if (bowlIsEmpty())
-	break;
       eat(phil);
-      if (bowlIsEmpty())
-	break;
+      usleep(rand() % 6 + 3);
       lphilo_sleep();
     }
   pthread_exit(0);

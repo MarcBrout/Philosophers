@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:42:39 2017 brout_m
-** Last update Thu Mar  9 18:21:18 2017 brout_m
+** Last update Fri Mar 10 17:01:14 2017 brout_m
 */
 
 #ifndef PHILO_H

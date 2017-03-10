@@ -5,14 +5,16 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:43:39 2017 brout_m
-** Last update Thu Mar  9 18:31:10 2017 brout_m
+** Last update Fri Mar 10 17:01:01 2017 brout_m
 */
 
+#include <time.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include "philo.h"
 
 int g_bowl;
+static pthread_barrier_t barrier;
 
 static int	initTable(t_loop const * const philosophers,
 			  t_philo * const table)
@@ -21,6 +23,8 @@ static int	initTable(t_loop const * const philosophers,
 
   i = 0;
   g_bowl = philosophers->maxEat;
+  if (pthread_barrier_init(&barrier, NULL, philosophers->nbPhil))
+    return (1);
   while (i < philosophers->nbPhil)
     {
       table[i].bowl = philosophers->maxEat;
@@ -37,19 +41,9 @@ static int	initTable(t_loop const * const philosophers,
 static void	*threadLaunch(void *philosophe)
 {
   t_philo	*philo;
-  int		i;
 
   philo = philosophe;
-  pthread_mutex_lock(&philo->stick);
-  if (philo->me == philo->size - 1)
-    {
-      i = 0;
-      while (i < philo->size)
-        {
-	  pthread_mutex_unlock(&philo->table[i].stick);
-	  ++i;
-        }
-    }
+  pthread_barrier_wait(&barrier);
   philoAction(&philo->table[philo->me]);
   return (NULL);
 }
@@ -73,6 +67,7 @@ int		launchPhilosophy(t_loop const * const philosophers, t_philo *table)
   int		i;
 
   i = 0;
+  srand(time(0));
   while (i < philosophers->nbPhil)
     {
       if (pthread_create(&table[i].thread, NULL, threadLaunch, &table[i]))
@@ -86,5 +81,6 @@ int		launchPhilosophy(t_loop const * const philosophers, t_philo *table)
       pthread_mutex_destroy(&table[i].stick);
       ++i;
     }
+  pthread_barrier_destroy(&barrier);
   return (0);
 }

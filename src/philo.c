@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:47:46 2017 brout_m
-** Last update Thu Mar  9 18:27:47 2017 brout_m
+** Last update Fri Mar 10 16:54:35 2017 brout_m
 */
 
 #include <stdio.h>
@@ -57,6 +57,7 @@ int		main(int ac, char **av)
   t_loop	philosophers;
   t_philo	*table;
 
+  RCFStartup(ac, av);
   if (ac != 5 ||
       setPhilosophers(ac, av, &philosophers ,
 		      (t_arg[2]){{"-p", &getNbPhilosopher},
@@ -69,7 +70,6 @@ int		main(int ac, char **av)
     }
   if (!(table = createTable(&philosophers)))
     return (1);
-  RCFStartup(ac, av);
   if (launchPhilosophy(&philosophers, table))
     {
       free(table);
