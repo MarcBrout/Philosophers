@@ -5,8 +5,12 @@
 ## Login   <marc.brout@epitech.eu>
 ##
 ## Started on  Mon Jan 23 13:38:11 2017 Brout
-## Last update Fri Mar 10 16:33:31 2017 brout_m
+## Last update Wed Mar 15 14:49:38 2017 brout_m
 ##
+
+SANITIZE=	no
+
+DEBUG=		no
 
 MAKE_DIR=	./
 

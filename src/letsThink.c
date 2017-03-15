@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:43:39 2017 brout_m
-** Last update Wed Mar 15 02:34:03 2017 brout_m
+** Last update Wed Mar 15 18:05:21 2017 brout_m
 */
 
 #include <time.h>
@@ -14,7 +14,6 @@
 #include "philo.h"
 
 int g_bowl;
-static pthread_barrier_t barrier;
 
 static int	initTable(t_loop const * const philosophers,
 			  t_philo * const table)
@@ -23,15 +22,12 @@ static int	initTable(t_loop const * const philosophers,
 
   i = 0;
   g_bowl = philosophers->maxEat;
-  if (pthread_barrier_init(&barrier, NULL, philosophers->nbPhil))
-    return (1);
   while (i < philosophers->nbPhil)
     {
       table[i].bowl = philosophers->maxEat;
       table[i].me = i;
       table[i].size = philosophers->nbPhil;
       table[i].table = table;
-      table[i].stop = &barrier;
       if (pthread_mutex_init(&table[i].stick, NULL))
 	return (1);
       ++i;
@@ -81,6 +77,5 @@ int		launchPhilosophy(t_loop const * const philosophers, t_philo *table)
       pthread_mutex_destroy(&table[i].stick);
       ++i;
     }
-  pthread_barrier_destroy(&barrier);
   return (0);
 }

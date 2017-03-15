@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:42:39 2017 brout_m
-** Last update Wed Mar 15 02:28:58 2017 brout_m
+** Last update Wed Mar 15 18:04:31 2017 brout_m
 */
 
 #ifndef PHILO_H
@@ -24,7 +24,6 @@ typedef struct		s_philo
   int			me;
   pthread_t		thread;
   pthread_mutex_t	stick;
-  pthread_barrier_t	*stop;
   int			size;
   struct s_philo	*table;
 }			t_philo;

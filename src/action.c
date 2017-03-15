@@ -5,7 +5,7 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Wed Mar 15 02:34:39 2017 brout_m
+** Last update Wed Mar 15 18:06:53 2017 brout_m
 */
 
 #include <stdlib.h>
@@ -17,7 +17,7 @@
 static pthread_mutex_t bowl = PTHREAD_MUTEX_INITIALIZER;
 int g_bowl;
 
-bool bowlIsEmpty()
+static bool bowlIsEmpty()
 {
   int remain;
 
@@ -27,7 +27,7 @@ bool bowlIsEmpty()
   return (remain < 1);
 }
 
-void update_g_bowl(int value)
+static void update_g_bowl(int value)
 {
   pthread_mutex_lock(&bowl);
   if (g_bowl > value)
@@ -35,7 +35,7 @@ void update_g_bowl(int value)
   pthread_mutex_unlock(&bowl);
 }
 
-void think(t_philo *phil)
+static void think(t_philo *phil)
 {
   pthread_mutex_lock(&phil->stick);
   lphilo_take_chopstick(&phil->stick);
@@ -44,10 +44,14 @@ void think(t_philo *phil)
   pthread_mutex_unlock(&phil->stick);
 }
 
-void eat(t_philo *phil)
+static int eat(t_philo *phil)
 {
   pthread_mutex_lock(RGHT_STCK(phil));
-  pthread_mutex_lock(&phil->stick);
+  if (pthread_mutex_trylock(&phil->stick))
+    {
+      pthread_mutex_unlock(RGHT_STCK(phil));
+      return (1);
+    }
   lphilo_take_chopstick(&phil->stick);
   lphilo_take_chopstick(RGHT_STCK(phil));
   lphilo_eat();
@@ -57,16 +61,27 @@ void eat(t_philo *phil)
   lphilo_release_chopstick(&phil->stick);
   pthread_mutex_unlock(RGHT_STCK(phil));
   pthread_mutex_unlock(&phil->stick);
+  return (0);
 }
 
 int philoAction(t_philo *phil)
 {
+  bool thk;
+
+  thk = false;
   while (!bowlIsEmpty())
     {
-      pthread_barrier_wait(phil->stop);
-      think(phil);
-      eat(phil);
+      if (!thk)
+	think(phil);
+      if (eat(phil))
+	{
+	  thk = true;
+	  continue;
+	}
+      else
+	thk = false;
       lphilo_sleep();
+      usleep(rand() % 100 + 50);
     }
   pthread_exit(0);
 }
