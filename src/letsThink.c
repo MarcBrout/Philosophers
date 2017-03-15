@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:43:39 2017 brout_m
-** Last update Fri Mar 10 17:01:01 2017 brout_m
+** Last update Wed Mar 15 02:34:03 2017 brout_m
 */
 
 #include <time.h>
@@ -31,6 +31,7 @@ static int	initTable(t_loop const * const philosophers,
       table[i].me = i;
       table[i].size = philosophers->nbPhil;
       table[i].table = table;
+      table[i].stop = &barrier;
       if (pthread_mutex_init(&table[i].stick, NULL))
 	return (1);
       ++i;
@@ -43,7 +44,6 @@ static void	*threadLaunch(void *philosophe)
   t_philo	*philo;
 
   philo = philosophe;
-  pthread_barrier_wait(&barrier);
   philoAction(&philo->table[philo->me]);
   return (NULL);
 }

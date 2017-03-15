@@ -5,7 +5,7 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Fri Mar 10 17:09:09 2017 brout_m
+** Last update Wed Mar 15 02:34:39 2017 brout_m
 */
 
 #include <stdlib.h>
@@ -63,9 +63,9 @@ int philoAction(t_philo *phil)
 {
   while (!bowlIsEmpty())
     {
+      pthread_barrier_wait(phil->stop);
       think(phil);
       eat(phil);
-      usleep(rand() % 6 + 3);
       lphilo_sleep();
     }
   pthread_exit(0);
