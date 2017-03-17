@@ -5,7 +5,7 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Wed Mar 15 18:06:53 2017 brout_m
+** Last update Fri Mar 17 09:44:57 2017 brout_m
 */
 
 #include <stdlib.h>
@@ -42,6 +42,7 @@ static void think(t_philo *phil)
   lphilo_think();
   lphilo_release_chopstick(&phil->stick);
   pthread_mutex_unlock(&phil->stick);
+  usleep(rand() % 75 + 75);
 }
 
 static int eat(t_philo *phil)
@@ -61,6 +62,7 @@ static int eat(t_philo *phil)
   lphilo_release_chopstick(&phil->stick);
   pthread_mutex_unlock(RGHT_STCK(phil));
   pthread_mutex_unlock(&phil->stick);
+  usleep(rand() % 75 + 75);
   return (0);
 }
 
@@ -71,6 +73,7 @@ int philoAction(t_philo *phil)
   thk = false;
   while (!bowlIsEmpty())
     {
+      usleep(rand() % 75 + 75);
       if (!thk)
 	think(phil);
       if (eat(phil))
@@ -81,7 +84,6 @@ int philoAction(t_philo *phil)
       else
 	thk = false;
       lphilo_sleep();
-      usleep(rand() % 100 + 50);
     }
   pthread_exit(0);
 }
