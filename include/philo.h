@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Thu Mar  9 16:42:39 2017 brout_m
-** Last update Wed Mar 15 18:04:31 2017 brout_m
+** Last update Fri Mar 17 10:49:29 2017 brout_m
 */
 
 #ifndef PHILO_H
@@ -40,5 +40,8 @@ int launchPhilosophy(t_loop const * const philosophers,
 		     t_philo *table);
 int philoAction(t_philo *phil);
 t_philo *createTable(t_loop const * const philosophers);
+void update_g_bowl(int value);
+bool bowlIsEmpty();
+int allAtBowl(t_philo *table, int size, int me);
 
 #endif /* !PHILO_H */

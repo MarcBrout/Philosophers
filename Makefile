@@ -5,7 +5,7 @@
 ## Login   <marc.brout@epitech.eu>
 ##
 ## Started on  Mon Jan 23 13:38:11 2017 Brout
-## Last update Wed Mar 15 14:49:38 2017 brout_m
+## Last update Fri Mar 17 10:49:59 2017 brout_m
 ##
 
 SANITIZE=	no
@@ -19,8 +19,9 @@ NAME=		philo
 SRC_DIR=	./src/
 
 SRC_FIL=	philo.c \
-			letsThink.c \
-			action.c
+		letsThink.c \
+		action.c \
+		checks.c
 
 SRC= 		$(addprefix $(SRC_DIR), $(SRC_FIL))
 
@@ -41,7 +42,7 @@ CFLAGS=	  	-W -Wall -Wextra -Werror $(INC)
 endif
 
 ifeq ($(SANITIZE), yes)
-CC +=	-fsanitize=thread
+CC +=		-fsanitize=thread
 endif
 
 RM=		rm -rf
