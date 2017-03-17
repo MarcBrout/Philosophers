@@ -5,7 +5,7 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Fri Mar 17 09:44:57 2017 brout_m
+** Last update Fri Mar 17 09:53:49 2017 brout_m
 */
 
 #include <stdlib.h>
@@ -74,8 +74,12 @@ int philoAction(t_philo *phil)
   while (!bowlIsEmpty())
     {
       usleep(rand() % 75 + 75);
+      if (bowlIsEmpty())
+	break;
       if (!thk)
 	think(phil);
+      if (bowlIsEmpty())
+	break;
       if (eat(phil))
 	{
 	  thk = true;
@@ -83,6 +87,8 @@ int philoAction(t_philo *phil)
 	}
       else
 	thk = false;
+      if (bowlIsEmpty())
+	break;
       lphilo_sleep();
     }
   pthread_exit(0);
