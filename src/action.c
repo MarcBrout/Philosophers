@@ -5,7 +5,7 @@
 ** Login   <benjamin.duhieu@epitech.eu>
 **
 ** Started on  Tue Mar  7 19:06:31 2017 duhieu_b
-** Last update Fri Mar 17 09:53:49 2017 brout_m
+** Last update Fri Mar 17 10:20:38 2017 brout_m
 */
 
 #include <stdlib.h>
@@ -66,6 +66,36 @@ static int eat(t_philo *phil)
   return (0);
 }
 
+int allAtBowl(t_philo *table, int size, int me)
+{
+  int i;
+  static int first = 1;
+
+  i = 0;
+  if (!first)
+    {
+      pthread_mutex_lock(&bowl);
+      if (table[me].bowl != g_bowl)
+	{
+	  pthread_mutex_unlock(&bowl);
+	  return (1);
+	}
+      while (i < size)
+	{
+	  if (table[i].bowl != g_bowl)
+	    {
+	      pthread_mutex_unlock(&bowl);
+	      return (0);
+	    }
+	  ++i;
+	}
+      pthread_mutex_unlock(&bowl);
+    }
+  else
+    first = 0;
+  return (1);
+}
+
 int philoAction(t_philo *phil)
 {
   bool thk;
@@ -73,7 +103,9 @@ int philoAction(t_philo *phil)
   thk = false;
   while (!bowlIsEmpty())
     {
-      usleep(rand() % 75 + 75);
+      usleep(rand() % 10 + 10);
+      if (!allAtBowl(phil->table, phil->size, phil->me))
+	continue ;
       if (bowlIsEmpty())
 	break;
       if (!thk)
